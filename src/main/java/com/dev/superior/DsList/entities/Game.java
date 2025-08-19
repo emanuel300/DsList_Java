@@ -21,9 +21,14 @@ public class Game {
     @Column(name = "game_year")
     private Integer year;
     private String genre;
+    private String platforms;
     private Double score;
     private String imgUrl;
+
+    @Column(columnDefinition = "TEXT") //QUANDO O TEXTO NO BANCO É ACIMA DE (255) CARACTER
     private String shortDescription;
+
+    @Column(columnDefinition = "TEXT")
     private String longDescription;
 
     @Override
