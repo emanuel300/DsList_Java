@@ -1,5 +1,6 @@
 package com.dev.superior.DsList.entities;
 
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,37 +12,20 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Table(name = "tb_game")
-public class Game {
+@Table(name = "tb_gameList")
+public class GameList {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String title;
-
-    @Column(name = "game_year")
-    private Integer year;
-
-    private String genre;
-
-    private String platforms;
-
-    private Double score;
-
-    private String imgUrl;
-
-    @Column(columnDefinition = "TEXT") //QUANDO O TEXTO NO BANCO É ACIMA DE (255) CARACTER
-    private String shortDescription;
-
-    @Column(columnDefinition = "TEXT")
-    private String longDescription;
+    private String name;
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Game game = (Game) o;
-        return Objects.equals(id, game.id);
+        GameList gameList = (GameList) o;
+        return Objects.equals(id, gameList.id);
     }
 
     @Override
