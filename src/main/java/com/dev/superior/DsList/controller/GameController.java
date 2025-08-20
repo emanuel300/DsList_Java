@@ -1,10 +1,13 @@
 package com.dev.superior.DsList.controller;
 
+import com.dev.superior.DsList.dto.GameDto;
 import com.dev.superior.DsList.dto.GameMinDto;
 import com.dev.superior.DsList.entities.Game;
 import com.dev.superior.DsList.service.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,5 +29,10 @@ public class GameController {
        return gameDto;
     }
 
+    @GetMapping("/{id}")
+    public GameDto gameFindById(@PathVariable Long id){
+        GameDto result = gameService.gameFindById(id);
+        return result;
+    }
 
 }
