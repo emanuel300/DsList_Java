@@ -4,8 +4,10 @@ import com.dev.superior.DsList.dto.GameDto;
 import com.dev.superior.DsList.dto.GameListDto;
 import com.dev.superior.DsList.entities.Game;
 import com.dev.superior.DsList.entities.GameList;
+import com.dev.superior.DsList.projections.GameMinProjection;
 import com.dev.superior.DsList.repository.GameListRepository;
 import com.dev.superior.DsList.repository.GameRepository;
+import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,9 @@ public class GameListService {
     @Autowired
     private GameListRepository gameListRepository;
 
+    @Autowired
+    private GameRepository gameRepository;
+
 
     @Transactional(readOnly = true)
     public List<GameListDto> gameFindAll(){
@@ -25,6 +30,21 @@ public class GameListService {
                 .map(x -> new GameListDto(x))
                 .toList();
 
+    }
+
+    @Transactional
+    public void move(long listId, int sourceIndex, int destinationIndex){
+
+        List<GameMinProjection> list = gameRepository.searchByList(listId);
+        GameMinProjection obj =  list.remove(sourceIndex);
+        list.add(destinationIndex, obj);
+
+        int min = sourceIndex < destinationIndex ? sourceIndex : destinationIndex;
+        int max = destinationIndex < sourceIndex ? destinationIndex : sourceIndex;
+
+        for (int i = min; i < max; i++){
+            gameListRepository.updateBelongingPosition(listId, list.get(i).getId(), i);
+        }
     }
 
 
