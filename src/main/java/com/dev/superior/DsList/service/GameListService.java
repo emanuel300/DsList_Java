@@ -16,6 +16,7 @@ import java.util.List;
 
 @Service
 public class GameListService {
+
     @Autowired
     private GameListRepository gameListRepository;
 
@@ -32,20 +33,24 @@ public class GameListService {
 
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public void move(long listId, int sourceIndex, int destinationIndex){
 
         List<GameMinProjection> list = gameRepository.searchByList(listId);
         GameMinProjection obj =  list.remove(sourceIndex);
         list.add(destinationIndex, obj);
-
         int min = sourceIndex < destinationIndex ? sourceIndex : destinationIndex;
-        int max = destinationIndex < sourceIndex ? destinationIndex : sourceIndex;
+        int max = sourceIndex < destinationIndex ? destinationIndex : sourceIndex;
 
-        for (int i = min; i < max; i++){
+        for (int i = min; i <= max; i++) {
             gameListRepository.updateBelongingPosition(listId, list.get(i).getId(), i);
         }
     }
 
+    @Transactional(readOnly = true)
+    public GameListDto findById(Long id) {
+        GameList entity = gameListRepository.findById(id).get();
+        return new GameListDto(entity);
+    }
 
 }
